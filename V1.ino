@@ -1,81 +1,150 @@
-int code[4] = {1,2,3,4};
-int tableau[8] = {2,3,4,5,8,11,12,9};
-int i = 0;
-int a = 0;
-int chiffre_tenter = 0;
-int test = 0;
+int code = 1234;
+String codeR = String(code);
+boolean erreur = false;
 
-void setup() 
-{ 
+const int btn1 = 2;
+const int btn2 = 3;
+const int btn3 = 4;
+const int btn4 = 5;
+const int led1 = 8;
+const int led2 = 9;
+const int led3 = 10;
+const int led4 = 11;
+const int ledv = 13;
+boolean imple = false;
+String var1;
+String var2;
+String var3;
+String var4;
+String vare1;
+String vare2;
+String vare3;
+String vare4;
+String codeT;
+
+ 
+void setup(){
+  pinMode(btn1, INPUT_PULLUP);
+  pinMode(btn2, INPUT_PULLUP);
+  pinMode(btn3, INPUT_PULLUP);
+  pinMode(btn4, INPUT_PULLUP);
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+  pinMode(led4, OUTPUT);
+  pinMode(ledv, OUTPUT);
   Serial.begin(9600);
-  pinMode(tableau[0], INPUT_PULLUP);
-  pinMode(tableau[1], INPUT_PULLUP);
-  pinMode(tableau[2], INPUT_PULLUP);
-  pinMode(tableau[3], INPUT_PULLUP); 
+  var1 = codeR[0];
+  var2 = codeR[1];
+  var3 = codeR[2];
+  var4 = codeR[3];
+  Serial.println(codeR);
+ 
 
 }
 
 void loop(){
-  Serial.println("LOOP");
-  while (i != 4){
-    Serial.println("WHILE");
-    delay(500);
-    activation_bouton(tableau[0]);
-    activation_bouton(tableau[1]);
-    activation_bouton(tableau[2]);
-    activation_bouton(tableau[3]);
-
-    Serial.println("chiffre_tenter : " + String(chiffre_tenter));
-    if (chiffre_tenter != 0){
-      Serial.println("Dans le 1er if");
-      if (chiffre_tenter == code[i]){
-        Serial.println("Chiffre " + String(i) + " de la combinaison est validé");
-        test = chiffre_tenter + 3;
-        Serial.println("allumage de " + String(tableau[test]));
-        digitalWrite(tableau[test], HIGH);
-        i = i +1 ;
-        chiffre_tenter = 0;
-        }
-        
-      else{
-        Serial.println("Chiffre " + String(i) + " de la combinaison est FAUX");
-        erreur_code();
-        }
-     } 
-} 
-
-Serial.println("fini");
-//code_valide();
-}
-///////////////////////////////////////////////////// Definition des fonctions ///////////////////////////////////////////////////// 
-
-void activation_bouton(int btn){
-  if (digitalRead(btn) == LOW) {
-    chiffre_tenter = btn - 1; // temp = valeur a tester
-    Serial.println("btn : " + String(chiffre_tenter));// chiffre saisi
+  while (codeT.length()<1){//test 1er chiffre
+  btnApp();
+  }// fin imple du 1er chiffre
+  if (codeT.length() == 1 && erreur == false){
+    vare1 = codeT[0];
+    if (var1 == vare1){
+      digitalWrite(led1, HIGH);
     }
-}
-void erreur_code(){ 
-  Serial.println("ERREUR, remise a 0 des variabales");
-  i = 0;
-  chiffre_tenter = 0;
-  while (a !=3){
-    digitalWrite(tableau[4], HIGH);
-    digitalWrite(tableau[5], HIGH);
-    digitalWrite(tableau[6], HIGH);
-    digitalWrite(tableau[7], HIGH);
-    delay(500);
-    digitalWrite(tableau[4], LOW);
-    digitalWrite(tableau[5], LOW);
-    digitalWrite(tableau[6], LOW);
-    digitalWrite(tableau[7], LOW);
-    delay(500);
-    a = a + 1;
+    else {
+      error();
     }
   }
-  
- void code_valide(){
-  Serial.println("coffre ouvert ");
-  Serial.println("led verte allume");
-  Serial.println("moteur active");
+  while (codeT.length()==1){//test 2eme chiffre
+  btnApp();
+  }// fin imple du 2eme chiffre
+  if (codeT.length() == 2 && erreur == false){
+    vare2 = codeT[1];
+    if (var2 == vare2){
+      digitalWrite(led2, HIGH);
+    }
+    else {
+      error();
+    }
+  }  
+  while (codeT.length()==2){//test 3eme chiffre
+  btnApp();
+  }// fin imple du 3eme chiffre
+  if (codeT.length() == 3 && erreur == false){
+    vare3 = codeT[2];
+    Serial.println(var3);
+    if (var3 == vare3){
+      digitalWrite(led3, HIGH);
+    }
+    else {
+      error();
+    }
+  }  
+  while (codeT.length()==3){//test 4eme chiffre
+  btnApp();
+  }// fin imple du 4eme chiffre
+  if (codeT.length() == 4 && erreur == false){
+    vare4 = codeT[3];
+    if (var4 == vare4){
+      digitalWrite(led4, HIGH);
+    }
+    else {
+      error();
+    }
   }
+}
+
+void error(){
+  erreur = true;
+  digitalWrite(led1, HIGH);
+  digitalWrite(led2, HIGH);
+  digitalWrite(led3, HIGH);
+  digitalWrite(led4, HIGH);
+  delay(300);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
+  delay(300);
+  digitalWrite(led1, HIGH);
+  digitalWrite(led2, HIGH);
+  digitalWrite(led3, HIGH);
+  digitalWrite(led4, HIGH);
+  delay(300);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
+  delay(300);
+  digitalWrite(led1, HIGH);
+  digitalWrite(led2, HIGH);
+  digitalWrite(led3, HIGH);
+  digitalWrite(led4, HIGH);
+  delay(300);
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+  digitalWrite(led4, LOW);
+  delay(300);
+
+}
+
+void btnApp(){
+  if (digitalRead(btn1)==LOW){
+  delay(200);
+  codeT+="1";
+  }
+  else if (digitalRead(btn2)==LOW){
+  delay(200);
+  codeT+="2";
+  }
+  else if (digitalRead(btn3)==LOW){
+  delay(200);
+  codeT+="3";
+  }
+  else if (digitalRead(btn4)==LOW){
+  delay(200);
+  codeT+="4";
+  }
+}
