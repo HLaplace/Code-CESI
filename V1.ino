@@ -1,3 +1,4 @@
+// code ne prenant pas en compte le moteur
 int code = 1234;
 String codeR = String(code);
 boolean erreur = false;
