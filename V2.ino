@@ -72,6 +72,7 @@ void activation_bouton(int btn){
 void erreur_code(){ 
   Serial.println("ERREUR, remise a 0 des variabales");
   i = 0;
+  a = 0;
   chiffre_tenter = 0;
   while (a !=3){ // car les leds clignotents 3 fois
     digitalWrite(tableau[4], HIGH);
