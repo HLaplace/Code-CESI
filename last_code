@@ -1,4 +1,86 @@
-);
+String Animal = "Lion";
+int code[4] = {1,2,3,4}; // code ouvrant le coffre 
+int tableau_connexion[8] = {2,3,4,5,8,9,10,11}; // tableau contenant les pins de tout les boutons puis de toute les leds
+int i = 0; // variable de suivi principale
+int chiffre_tenter = 0; // variable principale contenant le chiffre tenté par l'utilisateur
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(tableau_connexion[0], INPUT_PULLUP); // configuration de tout les boutons : broche disponible dans le tableau (4 première valeurs)
+  pinMode(tableau_connexion[1], INPUT_PULLUP);
+  pinMode(tableau_connexion[2], INPUT_PULLUP);
+  pinMode(tableau_connexion[3], INPUT_PULLUP); 
+  
+  pinMode(tableau_connexion[4], OUTPUT);// configuration de toutes les leds : broche disponible dans le tableau (4 dernières valeurs)
+  pinMode(tableau_connexion[5], OUTPUT);
+  pinMode(tableau_connexion[6], OUTPUT);
+  pinMode(tableau_connexion[7], OUTPUT);
+  
+  pinMode(12, OUTPUT); // led verte
+  pinMode(6, INPUT_PULLUP); // lecteur empreinte digitale
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void loop(){
+int nivSecu = 1; // defini a la  main
+//verification_code_debut();
+switch (nivSecu) {
+    case 1:
+      //MA1();
+      MA5();
+      Serial.println("Ouverture du coffre");
+      delay(300);
+      exit(1);
+      //break;
+      
+    case 2:
+      //MA1();  
+      MA4();  
+      Serial.println("Ouverture du coffre");
+      delay(300);
+      exit(1);
+      //break;
+
+    case 3:
+      MA2();  
+      MA5();  
+      Serial.println("Ouverture du coffre");
+      delay(300);
+      exit(1);
+      //break;
+      
+    case 4:
+      MA2();  
+      MA3();  
+      MA4();  
+      Serial.println("Ouverture du coffre");
+      delay(300);
+      exit(1);
+      //break;
+      
+    case 5:
+     // MA1();  
+      MA2();  
+      MA3();  
+      MA5();  
+      Serial.println("Ouverture du coffre");
+      delay(300);
+      exit(1);
+      //break;
+              
+    default:
+      //Serial.println("Ce niveau n existe pas ");  
+      break;
+}
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void verification_code_debut(){
+  
+ while (i != 4){ // quand i = 4, c'est que les 4 chiffres de la combinaisons sont validés
+    Serial.println("début du WHILE");
     delay(300); // tempo pour eviter que un appui sois pris comme plusieur entrées
  
     activation_bouton(tableau_connexion[0]);
