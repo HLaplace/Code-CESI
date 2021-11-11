@@ -1,185 +1,64 @@
-boolean first = false;
-boolean error = false;
-boolean ouverture=false;
-int NivSecu = 0;
-int Agent;
-String Animal = "Lion";
-int code[4] = {1,2,3,4}; // code ouvrant le coffre 
-int tableau_connexion[8] = {2,3,4,5,8,9,10,11}; // tableau contenant les pins de tout les boutons puis de toute les leds
-int i = 0; // variable de suivi principale
-int chiffre_tenter = 0; // variable principale contenant le chiffre tenté par l'utilisateur
+);
+    delay(300); // tempo pour eviter que un appui sois pris comme plusieur entrées
+ 
+    activation_bouton(tableau_connexion[0]);
+    activation_bouton(tableau_connexion[1]);
+    activation_bouton(tableau_connexion[2]);
+    activation_bouton(tableau_connexion[3]);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void setup()
-{
-  Serial.begin(9600);
-  pinMode(tableau_connexion[0], INPUT_PULLUP); // configuration de tout les boutons : broche disponible dans le tableau (4 première valeurs)
-  pinMode(tableau_connexion[1], INPUT_PULLUP);
-  pinMode(tableau_connexion[2], INPUT_PULLUP);
-  pinMode(tableau_connexion[3], INPUT_PULLUP); 
-  
-  pinMode(tableau_connexion[4], OUTPUT);// configuration de toutes les leds : broche disponible dans le tableau (4 dernières valeurs)
-  pinMode(tableau_connexion[5], OUTPUT);
-  pinMode(tableau_connexion[6], OUTPUT);
-  pinMode(tableau_connexion[7], OUTPUT);
-  
-  pinMode(12, OUTPUT); // led verte
-  pinMode(6, INPUT_PULLUP); // lecteur empreinte digitale
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void loop(){
-int nivSecu = 1; // defini a la  main
-switch (nivSecu) {
-    case 1:
-      //MA1();
-      MA5();
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
-      
-    case 2:
-      MA1();  
-      MA4();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
-
-    case 3:
-      MA2();  
-      MA5();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
-      
-    case 4:
-      MA2();  
-      MA3();  
-      MA4();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
-      
-    case 5:
-      MA1();  
-      MA2();  
-      MA3();  
-      MA5();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
-              
-    default:
-      //Serial.println("Ce niveau n existe pas ");  
-      break;
-}
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-int MA1(){
-  int carte[4] = {2, 2, 2, 2};
-  int temp = 0;
-  Serial.println("Quel est votre nom ?");
-  Serial.println("BOND : 0");
-  Serial.println("COLBY : 1");
-  Serial.println("BLAKE : 2"); 
-  Serial.println("PHILBY : 3" );
-  Serial.println( "SMITH : 4");
-  Serial.println("JAMES : 5");
-  Serial.println("MORTON : 6");
-  Serial.println("JACKSON : 7");
-  Serial.println("SCOTT : 8");
-  Serial.println("EVANS : 9" );
-  Serial.println("LEWIS : 10");
-  Serial.println("MAY : 11");
-  Serial.println("WALKER : 12");
-  Serial.println("ADAMS : 13");
-  Serial.println("OLIVER : 14");
-  Serial.println("BAKER : 15");
-  
-  if (Serial.available()>1){
-      int f = Serial.parseInt();
-      if (f == carte[0]){
-        temp = temp + 1;
-        }
-  }
+    Serial.println("chiffre_tenter : " + String(chiffre_tenter)); // chiffre ressorti par l'appui d'un bouton
     
-  
-  boolean g = false;
-  while (temp<4){
-    if (Serial.available()>1){//active MA1
-      int f = Serial.parseInt();
-      if (temp == 3) {
-        g=MA1Bis(f, temp);
-        temp +=1;
-      }
-      else {
-        MA1Bis(f, temp);
-        temp +=1;
-      }
-    }
-  } 
-  return g;
+    if (chiffre_tenter != 0){// si il est égal à 0 c'est qu'aucun chiffre n'a été tenté
+      
+      if (chiffre_tenter == code[i]){ // si le chiffre tenter est le chiffre attendu par le code
+        Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison validé");
+        Serial.println("allumage de la led sur le pin " + String(tableau_connexion[i + 4]));
+        digitalWrite(tableau_connexion[i + 4], HIGH);
+        
+        i = i +1 ; // car un des chiffres de la combinaison est validé
+        chiffre_tenter = 0;
+        }
+        
+      else{ // si le chiffre entré par l'utilisateur n'est pas le bon
+        Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison est FAUX");
+        erreur_code();
+        }
+     } 
+ }
+  digitalWrite(12, HIGH); // led verte allumé
+  delay(1000);
+  Serial.println("coffre ouvert ");
 }
 
-int MA1Bis(int chiffre, int num){
-  boolean h = false;
-  Serial.println(num);
-  int TabAgent[16] = {248, 1411, 3563, 4065, 4597, 6395, 7340,7880, 9233, 10014, 10250, 12439, 12716, 13704, 14023, 15442};
-  if (num == 0){
-      Agent = chiffre * 1000;
-      Serial.println("Quel est votre prénom ?");
-      Serial.println("Alexandre : 0");
-      Serial.println("Jean-Marie : 1");
-      Serial.println("Henri : 2");
-      Serial.println("Louis : 3");
-      Serial.println("Tony : 4");
-      Serial.println("Gael : 5");
-      Serial.println("Jack : 6");
-      Serial.println("Theo : 7");
-      Serial.println("Adam : 8");
-      Serial.println("Leo : 9");
-      Serial.println("Simon : 10");
-      Serial.println("William : 11");
-      Serial.println("Loic : 12");
-      Serial.println("Paul : 13");
-      Serial.println("Charles : 14");
-      Serial.println("Tom : 15");
-      
-  }
-  else if (num == 1){
-      Agent = Agent + chiffre * 100;
-      Serial.println("Quelle est votre date de naissance ?");
-      String TabNai[16] = {"16/06/82 : 0", "30/05/86 : 1", "15/04/83 : 2", "21/08/85 : 3", "17/03/84 : 4", "02/01/88 : 5", "17/09/81 : 6", "20/12/82 : 7", "26/11/90 : 8", "18/08/80 : 9", "05/04/83 : 10", "03/10/85 : 11", "22/07/84 : 12", "07/12/86 : 13", "21/11/89 : 14", "31/03/90 : 15"};
-    for(int i = 0; i<16; i++){
-        Serial.println(TabNai[i]);
-      }
-  }
-  else if (num == 2){
-      Agent = Agent + chiffre * 10;
-      Serial.println("Veuillez saisir votre numero de matricule");
-      String TabMat[16] = {"007 : 0", "004 : 1", "009 : 2", "002 : 3", "001 : 4", "012 : 5", "035 : 6", "008 : 7", "079 : 8", "003 : 9", "028 : 10", "046 : 11", "005 : 12", "092 : 13", "083 : 14", "006 : 15"};
-      for(int i = 0; i<16; i++){
-        Serial.println(TabMat[i]);
-      }
-  }
-  else if (num == 3){
-      Agent = Agent + chiffre;
-    for(int compteur = 0; compteur<16; compteur++){
-      if (TabAgent[compteur]==Agent){
-      h=true;
+// fonction qui renvoie le chiffre entré par l'utilisateur en fonction du bouton appuyé
+void activation_bouton(int btn){
+  if (digitalRead(btn) == LOW) {
+    chiffre_tenter = btn - 1; 
     }
-    }
-    return h;
-  }
 }
+
+// fonction activant le clignotement des leds quand le chiffre entré est faux
+void erreur_code(){ 
+  Serial.println("ERREUR, remise a 0 des variabales");
+  i = 0;
+  int a = 0; // pour que la fonction puisse fonctioner plusieurs fois
+  chiffre_tenter = 0;
+  while (a !=3){ // car les leds clignotents 3 fois
+    digitalWrite(tableau_connexion[4], HIGH);
+    digitalWrite(tableau_connexion[5], HIGH);
+    digitalWrite(tableau_connexion[6], HIGH);
+    digitalWrite(tableau_connexion[7], HIGH);
+    delay(500);
+    digitalWrite(tableau_connexion[4], LOW);
+    digitalWrite(tableau_connexion[5], LOW);
+    digitalWrite(tableau_connexion[6], LOW);
+    digitalWrite(tableau_connexion[7], LOW);
+    delay(500);
+    a = a + 1;
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////MA2//////////////////////////////////////////////////////////////////////////////////
 int MA2(){
