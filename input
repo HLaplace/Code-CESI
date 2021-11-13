@@ -1,0 +1,19 @@
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.println("Bonjour, veuillez suivre les indications en repondant aux questions, afin d'excuter une verification");
+  Serial.println("Quel est votre niveau de securite?");
+  int Niveausecurite=0;
+  
+   while(Niveausecurite==0){
+      Niveausecurite=Serial.parseInt();
+    } 
+   Serial.println(Niveausecurite);
+  test();
+}
+
+int test(){
+	Serial.println("test");
+}
