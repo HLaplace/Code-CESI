@@ -28,13 +28,14 @@ void setup()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop(){
-
+  
+  
   verification_code_debut();
-  int NivSecu;
-
+  int NivSecu = 0;
+  Serial.println("Niveau de sécurité ?");
   while (NivSecu == 0){
     if (Serial.available()>1){
-       NivSecu = Serial.parseInt();//recupere une chaine de caractere
+       NivSecu = Serial.parseInt();//recupere un entier
       }
     }
   
@@ -89,7 +90,7 @@ void loop(){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////Verifiaction du code au debut////////////////////////////////////////////////////////////////////////////////////////////
 void verification_code_debut(){
- 
+ Serial.println("Entrez le code sur les boutons :");
  while (i != 4){ // quand i = 4, c'est que les 4 chiffres de la combinaisons sont validés
     delay(300); // tempo pour eviter que un appui sois pris comme plusieur entrées
  
@@ -102,7 +103,6 @@ void verification_code_debut(){
       
       if (chiffre_tenter == code[i]){ // si le chiffre tenter est le chiffre attendu par le code
         Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison validé");
-        Serial.println("allumage de la led sur le pin " + String(tableau_connexion[i + 4]));
         digitalWrite(tableau_connexion[i + 4], HIGH);
         
         i = i +1 ; // car un des chiffres de la combinaison est validé
@@ -110,7 +110,6 @@ void verification_code_debut(){
         }
         
       else{ // si le chiffre entré par l'utilisateur n'est pas le bon
-        Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison est FAUX");
         erreur_code();
         }
      } 
