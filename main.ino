@@ -30,7 +30,7 @@ void setup()
 void loop(){
   
   
-  verification_code_debut();
+  //verification_code_debut();
   int NivSecu = 0;
   Serial.println("Niveau de sécurité ?");
   while (NivSecu == 0){
@@ -228,7 +228,9 @@ int MA2(){
   randomSeed(analogRead(0));//permet de changer de variable aléatoire
   String x = "";
   while (x == ""){
-     x = Serial.readString();//recupere une chaine de caractere
+    if (Serial.available()>1){
+       x = Serial.readString();//recupere une chaine de caractere
+    }
   }
   e = CleAgent(x);
   M = random(2881);//nombre aléatoire
@@ -277,7 +279,7 @@ int CleAgent(String x){//recupere la cle publique de l'agent
     
     for(i=0; i<(NomAgent.length()); i++)
     {
-        if(String(NomAgent[i]) == x)//dès que ma lettre coincide, je recupere la position
+        if(String(NomAgent[i]) == String(x))//dès que ma lettre coincide, je recupere la position
         {
             // alors on l'enregistre
             cle = ClePublicAgent[i];//j'utilise la position pour recupere la clé
