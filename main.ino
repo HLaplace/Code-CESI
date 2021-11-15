@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////////////Variables globales///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////Variables globales///////////////////////////////////////////////////////////////////////////////////////////////
 String Animal = "Lion";
-int code[4] = {1,2,3,4}; // code ouvrant le coffre 
+int code[4] = {1,2,3,4}; // code ouvrant le coffre
 int tableau_connexion[8] = {2,3,4,5,8,9,10,11}; // tableau contenant les pins de tout les boutons puis de toute les leds
 
 int i = 0; // variable de suivi principale
@@ -14,13 +14,13 @@ void setup()
   pinMode(tableau_connexion[0], INPUT_PULLUP); // configuration de tout les boutons : broche disponible dans le tableau (4 première valeurs)
   pinMode(tableau_connexion[1], INPUT_PULLUP);
   pinMode(tableau_connexion[2], INPUT_PULLUP);
-  pinMode(tableau_connexion[3], INPUT_PULLUP); 
-  
+  pinMode(tableau_connexion[3], INPUT_PULLUP);
+ 
   pinMode(tableau_connexion[4], OUTPUT);// configuration de toutes les leds : broche disponible dans le tableau (4 dernières valeurs)
   pinMode(tableau_connexion[5], OUTPUT);
   pinMode(tableau_connexion[6], OUTPUT);
   pinMode(tableau_connexion[7], OUTPUT);
-  
+ 
   pinMode(12, OUTPUT); // led verte
   pinMode(6, INPUT_PULLUP); // lecteur empreinte digitale
 }
@@ -28,8 +28,8 @@ void setup()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop(){
-  
-  
+ 
+ 
   //verification_code_debut();
   int NivSecu = 0;
   Serial.println("Niveau de sécurité ?");
@@ -38,7 +38,7 @@ void loop(){
        NivSecu = Serial.parseInt();//recupere un entier
       }
     }
-  
+ 
   switch (NivSecu) {
     case 1:
       MA1();
@@ -47,7 +47,7 @@ void loop(){
       delay(300);
       exit(1);
       //break;
-      
+     
     case 2:
       MA1();  
       MA4();  
@@ -63,7 +63,7 @@ void loop(){
       delay(300);
       exit(1);
       //break;
-      
+     
     case 4:
       MA2();  
       MA3();  
@@ -72,7 +72,7 @@ void loop(){
       delay(300);
       exit(1);
       //break;
-      
+     
     case 5:
       MA1();  
       MA2();  
@@ -82,7 +82,7 @@ void loop(){
       delay(300);
       exit(1);
       //break;
-              
+             
     default:
       Serial.println("Ce niveau n existe pas ");  
       break;
@@ -98,21 +98,21 @@ void verification_code_debut(){
     activation_bouton(tableau_connexion[1]);
     activation_bouton(tableau_connexion[2]);
     activation_bouton(tableau_connexion[3]);
-    
+   
     if (chiffre_tenter != 0){// si il est égal à 0 c'est qu'aucun chiffre n'a été tenté
-      
+     
       if (chiffre_tenter == code[i]){ // si le chiffre tenter est le chiffre attendu par le code
         Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison validé");
         digitalWrite(tableau_connexion[i + 4], HIGH);
-        
+       
         i = i +1 ; // car un des chiffres de la combinaison est validé
         chiffre_tenter = 0;
         }
-        
+       
       else{ // si le chiffre entré par l'utilisateur n'est pas le bon
         erreur_code();
         }
-     } 
+     }
  }
   digitalWrite(12, HIGH); // led verte allumé
   delay(1000);
@@ -121,12 +121,12 @@ void verification_code_debut(){
 // fonction qui renvoie le chiffre entré par l'utilisateur en fonction du bouton appuyé
 void activation_bouton(int btn){
   if (digitalRead(btn) == LOW) {
-    chiffre_tenter = btn - 1; 
+    chiffre_tenter = btn - 1;
     }
 }
 
 // fonction activant le clignotement des leds quand le chiffre entré est faux
-void erreur_code(){ 
+void erreur_code(){
   Serial.println("ERREUR, remise a 0 des variabales");
   i = 0;
   chiffre_tenter = 0;
@@ -203,7 +203,7 @@ void MA1(){
     Serial.println("MA1 non valider");
     }
    
-  }   
+  }  
 
 int MA1_bis(int multi){  
  
@@ -240,7 +240,7 @@ int MA2(){
   Serial.println("Entrez le message :");
   while (Mp == 0){
       Mp = Serial.parseInt();//recupere un entier dans la console
-  } 
+  }
   if (M==Mp){
     Serial.print("Vous êtes authentifié! Bienvenue agent ");
     Serial.println(x);
@@ -263,7 +263,7 @@ int Modexp(float a, int e, float n){
   else {  
     r = 1;
     while (e>0){
-      r = fmod((r*fmod(a,n)),n); 
+      r = fmod((r*fmod(a,n)),n);
       e=e-1;
     }
   }
@@ -271,14 +271,15 @@ int Modexp(float a, int e, float n){
 }
 
 int CleAgent(String x){//recupere la cle publique de l'agent
-  
+ 
     int ClePublicAgent[16] = {601,619,631,641,647,653,661,673,691,701,733,739,751,797,809,811};
     String NomAgent = "ABCDEFHIJKLMNOPQ";
     int i = 0;
     int cle = 0;
-    
+   
     for(i=0; i<(NomAgent.length()); i++)
     {
+      Serial.println(String(NomAgent[i]) == String(x));
         if(String(NomAgent[i]) == String(x))//dès que ma lettre coincide, je recupere la position
         {
             // alors on l'enregistre
@@ -324,6 +325,6 @@ int MA5(){
         exit(1);
        }
     }
-  } 
+  }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
