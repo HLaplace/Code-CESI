@@ -1,11 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////Variables globales///////////////////////////////////////////////////////////////////////////////////////////////
-String Animal = "Lion";
+String Animal = "Licorne";
 int code[4] = {1,2,3,4}; // code ouvrant le coffre 
 int tableau_connexion[8] = {2,3,4,5,8,9,10,11}; // tableau contenant les pins de tout les boutons puis de toute les leds
 
 int i = 0; // variable de suivi principale
 int chiffre_tenter = 0; // variable principale contenant le chiffre tenté par l'utilisateur
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup()
@@ -22,14 +21,14 @@ void setup()
   pinMode(tableau_connexion[7], OUTPUT);
   
   pinMode(12, OUTPUT); // led verte
+  pinMode(13, OUTPUT); // led bleu
   pinMode(6, INPUT_PULLUP); // lecteur empreinte digitale
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop(){
-  
-  
+
   verification_code_debut();
   int NivSecu = 0;
   Serial.println("Niveau de sécurité ?");
@@ -43,45 +42,30 @@ void loop(){
     case 1:
       MA1();
       MA3();
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
+      fin();
       
     case 2:
       MA1();  
       MA4();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
+      fin();
 
     case 3:
       MA2();  
       MA5();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
+      fin();
       
     case 4:
       MA2();  
       MA3();  
       MA4();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
+      fin();
       
     case 5:
       MA1();  
       MA2();  
       MA3();  
       MA5();  
-      Serial.println("Ouverture du coffre");
-      delay(300);
-      exit(1);
-      //break;
+      fin();
               
     default:
       Serial.println("Ce niveau n existe pas ");  
@@ -90,7 +74,6 @@ void loop(){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////Verifiaction du code au debut////////////////////////////////////////////////////////////////////////////////////////////
 void verification_code_debut(){
- Serial.println("Entrez le code sur les boutons :");
  while (i != 4){ // quand i = 4, c'est que les 4 chiffres de la combinaisons sont validés
     delay(300); // tempo pour eviter que un appui sois pris comme plusieur entrées
  
@@ -103,6 +86,7 @@ void verification_code_debut(){
       
       if (chiffre_tenter == code[i]){ // si le chiffre tenter est le chiffre attendu par le code
         Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison validé");
+        Serial.println("allumage de la led sur le pin " + String(tableau_connexion[i + 4]));
         digitalWrite(tableau_connexion[i + 4], HIGH);
         
         i = i +1 ; // car un des chiffres de la combinaison est validé
@@ -110,6 +94,7 @@ void verification_code_debut(){
         }
         
       else{ // si le chiffre entré par l'utilisateur n'est pas le bon
+        Serial.println("Chiffre n°" + String(i + 1) + " de la combinaison est FAUX");
         erreur_code();
         }
      } 
@@ -227,10 +212,14 @@ int MA2(){
   Serial.println("Identifiez-vous :");
   randomSeed(analogRead(0));//permet de changer de variable aléatoire
   String x = "";
-  while (x == ""){
+  
+  while (x==""){
+    if (Serial.available()>1){
      x = Serial.readString();//recupere une chaine de caractere
+    }
   }
-  e = CleAgent(x);
+  Serial.println(String(x));
+  e = 619; //CleAgent(x);
   M = random(2881);//nombre aléatoire
   C = Modexp(M,e,2881);
   Serial.print("Message a dechiffrer :");
@@ -268,23 +257,19 @@ int Modexp(float a, int e, float n){
   return r;
 }
 
-int CleAgent(String x){//recupere la cle publique de l'agent
-  
-    int ClePublicAgent[16] = {601,619,631,641,647,653,661,673,691,701,733,739,751,797,809,811};
-    String NomAgent = "ABCDEFHIJKLMNOPQ";
-    int i = 0;
-    int cle = 0;
-    
-    for(i=0; i<(NomAgent.length()); i++)
-    {
-        if(String(NomAgent[i]) == x)//dès que ma lettre coincide, je recupere la position
-        {
-            // alors on l'enregistre
-            cle = ClePublicAgent[i];//j'utilise la position pour recupere la clé
-        }
+int CleAgent(String lettre){// va chercher la cle public en focntion de la letre de l agent
+  int ClePublicAgent[16] = {601,619,631,641,647,653,661,673,691,701,733,739,751,797,809,811};
+  String nom_agent = "ABCDEFHIJKLMNOPQ";
+  for (int i = 0; i <= 16; i++) {
+    if (String(nom_agent[i]) == lettre){
+      Serial.println(ClePublicAgent[i]);
+      delay(2000);
+      return ClePublicAgent[i];
     }
-    return cle;
+  }
 }
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////MA//////////////////////////////////////////////////////////////////////////////////////////////////
 bool MA3(){ // scanner retinien simule par les boutons 1 et 6
   Serial.println("le scan retienien va commencer");
@@ -300,12 +285,12 @@ bool MA4(){ // reconnaissance digital simulé par un bouton branché sur le pin 
    while (digitalRead(6) == HIGH ){
     delay(500);
     }
-  Serial.println("doight reconnu");
+  Serial.println("doigt reconnu");
   delay(300);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////MA5//////////////////////////////////////////////////////////////////////////////////////////////////
 int MA5(){
-  String a[16] = {"Taureau", "Lion", "Verseau", "Belier", "Sagitaire", "Poisson", "Poisson", "Vierge", "Gémeaux", "Cancer", "Balance", "Scorpion", "Capricorne", "Papillon", "Lynx", "Ours" };
+  String a[16] = {"Taureau", "Lion", "Verseau", "Belier", "Sagitaire", "Poisson", "Licorne", "Vierge", "Gémeaux", "Cancer", "Balance", "Scorpion", "Capricorne", "Papillon", "Lynx", "Ours" };
   boolean id=false;
   boolean entree = false;
   Serial.print("Votre Carte ID est:");
@@ -314,7 +299,7 @@ int MA5(){
       entree = true;
       int x = Serial.parseInt();
       if (Animal == a[x-1]){
-        Serial.print("exact");
+        Serial.println("exact");
       }
       else{
         Serial.print("erreur identification de la carte");
@@ -324,4 +309,11 @@ int MA5(){
     }
   } 
 }
+////////////////////////////////////////////////////////////////////////////////////////////Fonction fin////////////////////////////////////////////////////////////////////////////////////////////
+void fin(){
+  Serial.println("Ouverture du coffre");
+  digitalWrite(13, HIGH);
+  delay(5000);
+  exit(1);
+  }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
