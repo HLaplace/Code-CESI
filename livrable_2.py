@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-
+# version locale du code
 import numpy as np
 import wavio as wav
 from matplotlib import pyplot as plt
