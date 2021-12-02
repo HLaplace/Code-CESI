@@ -29,7 +29,6 @@ for i in range(0, len(tab_frequence)): # je parcours pour tout les frequences du
 	plt.savefig(str(loc) + "\\"  + str(file_name) + "\\" + str(file_name_png)) # enregistrement du graphe
 	wav.write(str(loc) + "\\" + str(file_name) + "\\" + str(file_name_wav), son, 44100,sampwidth=3) # enregistremeznt du fichier sonore
 	print(file_name)
-	plt.clf()
 
 	winsound.PlaySound(str(loc) + "\\" + str(file_name) + "\\" + str(file_name_wav),winsound.SND_ALIAS) # lecture du son
 
